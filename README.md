@@ -39,6 +39,6 @@ To run this pipeline successfully, **Repository Secrets** must be configured und
 The script automatically discovers endpoints linked to the Static Web Apps by looking for assets containing `"myresume"`. Ensure the custom domains are mapped natively within the Azure portal so they append seamlessly to the automated verification array.
 
 ### 2. Local Debugging
-You can run the script locally for development testing. The code contains an execution guard loop that skips the heavy browser installation layers outside of CI environments:
+The script can be excuted locally for development testing. The code contains an execution guard loop that skips the heavy browser installation layers outside of CI environments:
 ```powershell
 ./Query_Azure.ps1

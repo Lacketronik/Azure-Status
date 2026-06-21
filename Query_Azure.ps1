@@ -164,7 +164,7 @@ $SlackBlocks = @(
     @{ type = 'divider' },
     @{
         type = 'section'
-        text = @{ type = 'mrkdwn'; text = '*Static Web App Availability Manifest*' }
+        text = @{ type = 'mrkdwn'; text = '*Static Web App Availability*' }
     },
     @{
         type = 'section'

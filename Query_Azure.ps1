@@ -67,13 +67,13 @@ if ($env:GITHUB_ACTIONS -eq "true") {
     
     playwright install chromium --with-deps
 
-    $CacheBuster = Get-Date -Format "yyyyMMddHHmmss"
     $UtcTime = [DateTime]::UtcNow
     $SgtZone = [System.TimeZoneInfo]::FindSystemTimeZoneById("Singapore Standard Time")
     $SgtTime = [System.TimeZoneInfo]::ConvertTimeBySystemTimeZoneId($UtcTime, "Singapore Standard Time")
     $TimestampText = "Captured: $($SgtTime.ToString('yyyy-MM-dd HH:mm')) SGT"
     
     for ($i = 0; $i -lt $UrlArray.Count; $i++) {
+        $CacheBuster = Get-Date -Format "yyyyMMddHHmmss"
         $TargetUrl = $UrlArray[$i]
         $CleanFileName = $TargetUrl -replace "https://", "" -replace "/", "-"
         $FileName = "screenshot-$CleanFileName.png"

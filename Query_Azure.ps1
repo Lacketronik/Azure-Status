@@ -1,7 +1,6 @@
-﻿$WebHookURL = $env:SLACK_WEBHOOK_URL
 $SubscriptionID = $env:AZURE_SUBSCRIPTION_ID
 
-if ([string]::IsNullOrEmpty($WebHookURL) -or [string]::IsNullOrEmpty($SubscriptionID)) {
+if ([string]::IsNullOrEmpty($SubscriptionID)) {
     Write-Error "Error: Missing required environment variables! Check GitHub Secrets."
     exit 1
 }

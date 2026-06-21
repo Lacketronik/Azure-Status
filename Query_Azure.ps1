@@ -92,12 +92,14 @@ img_path = '$ScreenshotPath'
 if os.path.exists(img_path):
     img = Image.open(img_path).convert('RGBA')
     txt = Image.new('RGBA', img.size, (255,255,255,0))
-
-    d = ImageDraw.Draw(txt)
-    # Rectangle coordinates: [x0, y0, x1, y1]
-    d.rectangle([img.size[0] - 280, img.size[1] - 40, img.size[0] - 10, img.size[1] - 10], fill=(0,0,0,160))
     
-    d.text((img.size[0] - 270, img.size[1] - 32), '$TimestampText', fill=(255,255,255,255))
+    d = ImageDraw.Draw(txt)
+    
+    d.rectangle([img.size[0] - 340, img.size[1] - 60, img.size[0] - 10, img.size[1] - 10], fill=(0,0,0,160))
+    
+    d.text((img.size[0] - 330, img.size[1] - 52), '$TargetUrl', fill=(255,255,255,255))
+    
+    d.text((img.size[0] - 330, img.size[1] - 30), '$TimestampText', fill=(255,255,255,255))
     
     final_img = Image.alpha_composite(img, txt).convert('RGB')
     final_img.save(img_path, 'PNG')

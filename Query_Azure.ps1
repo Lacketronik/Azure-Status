@@ -63,11 +63,15 @@ $SlackImageBlocks = @()
 if ($env:GITHUB_ACTIONS -eq "true") {
     Write-Host "Running in GitHub Actions. Bootstrapping Headless Browser..."
     
-    pip install shot-scraper playwright --quiet
+    pip install shot-scraper playwright pillow --quiet
     
     playwright install chromium --with-deps
 
     $CacheBuster = Get-Date -Format "yyyyMMddHHmmss"
+    $UtcTime = [DateTime]::UtcNow
+    $SgtZone = [System.TimeZoneInfo]::FindSystemTimeZoneById("Singapore Standard Time")
+    $SgtTime = [System.TimeZoneInfo]::ConvertTimeBySystemTimeZoneId($UtcTime, "Singapore Standard Time")
+    $TimestampText = "Captured: $($SgtTime.ToString('yyyy-MM-dd HH:mm')) SGT"
     
     for ($i = 0; $i -lt $UrlArray.Count; $i++) {
         $TargetUrl = $UrlArray[$i]
@@ -77,6 +81,28 @@ if ($env:GITHUB_ACTIONS -eq "true") {
         
         Write-Host "Capturing: $TargetUrl -> $ScreenshotPath"
         shot-scraper $TargetUrl -o $ScreenshotPath --width 1280 --height 800 --wait 5000
+
+        if (Test-Path $ScreenshotPath) {
+            Write-Host "Watermarking timestamp onto $FileName..."
+            python -c @"
+from PIL import Image, ImageDraw, ImageFont
+import os
+
+img_path = '$ScreenshotPath'
+if os.path.exists(img_path):
+    img = Image.open(img_path).convert('RGBA')
+    txt = Image.new('RGBA', img.size, (255,255,255,0))
+
+    d = ImageDraw.Draw(txt)
+    # Rectangle coordinates: [x0, y0, x1, y1]
+    d.rectangle([img.size[0] - 280, img.size[1] - 40, img.size[0] - 10, img.size[1] - 10], fill=(0,0,0,160))
+    
+    d.text((img.size[0] - 270, img.size[1] - 32), '$TimestampText', fill=(255,255,255,255))
+    
+    final_img = Image.alpha_composite(img, txt).convert('RGB')
+    final_img.save(img_path, 'PNG')
+"@
+        }
         
         $GitHubRawUrl = "https://raw.githubusercontent.com/Lacketronik/Azure-Status/main/docs/$FileName`?v=$CacheBuster"
         

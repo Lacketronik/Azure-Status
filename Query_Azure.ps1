@@ -56,36 +56,39 @@ $UrlTable = foreach ($Url in $UrlArray) {
 
 # Screenshot WebApp
 #===========================================================================================================================================================================================
-Write-Host "Initializing browser and snapping screenshots..."
-pip install shot-scraper --quiet
-shot-scraper install --quiet
-
 if (!(Test-Path "docs")) { New-Item -ItemType Directory -Path "docs" }
 
 $SlackImageBlocks = @()
 
-for ($i = 0; $i -lt $UrlArray.Count; $i++) {
-    $TargetUrl = $UrlArray[$i]
+if ($env:GITHUB_ACTIONS -eq "true") {
+    Write-Host "Running in GitHub Actions. Bootstrapping Headless Browser..."
     
-    $CleanFileName = $TargetUrl -replace "https://", "" -replace "/", "-"
-    $FileName = "screenshot-$CleanFileName.png"
-    $ScreenshotPath = "docs/$FileName"
+    pip install shot-scraper playwright --quiet
     
-    Write-Host "Capturing: $TargetUrl -> $ScreenshotPath"
-    shot-scraper $TargetUrl -o $ScreenshotPath --width 1280 --height 800
+    playwright install chromium --with-deps
     
-    $GitHubRawUrl = "https://raw.githubusercontent.com/Lacketronik/Azure-Status/main/docs/$FileName"
-    
-    $SlackImageBlocks += @{
-        type = 'image'
-        title = @{ type = 'plain_text'; text = "📷 Visual Check: $CleanFileName" }
-        image_url = $GitHubRawUrl
-        alt_text = $CleanFileName
+    for ($i = 0; $i -lt $UrlArray.Count; $i++) {
+        $TargetUrl = $UrlArray[$i]
+        $CleanFileName = $TargetUrl -replace "https://", "" -replace "/", "-"
+        $FileName = "screenshot-$CleanFileName.png"
+        $ScreenshotPath = "docs/$FileName"
+        
+        Write-Host "Capturing: $TargetUrl -> $ScreenshotPath"
+        shot-scraper $TargetUrl -o $ScreenshotPath --width 1280 --height 800
+        
+        $GitHubRawUrl = "https://raw.githubusercontent.com/Lacketronik/Azure-Status/main/docs/$FileName"
+        
+        $SlackImageBlocks += @{
+            type = 'image'
+            title = @{ type = 'plain_text'; text = "📷 Visual Check: $CleanFileName" }
+            image_url = $GitHubRawUrl
+            alt_text = $CleanFileName
+        }
+        
+        if ($i -lt ($UrlArray.Count - 1)) { $SlackImageBlocks += @{ type = 'divider' } }
     }
-
-    if ($i -lt ($UrlArray.Count - 1)) {
-        $SlackImageBlocks += @{ type = 'divider' }
-    }
+} else {
+    Write-Host "Local execution detected. Skipping headless screenshots to avoid environment errors."
 }
 #===========================================================================================================================================================================================
 

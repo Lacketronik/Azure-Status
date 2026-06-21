@@ -74,13 +74,13 @@ if ($env:GITHUB_ACTIONS -eq "true") {
         $ScreenshotPath = "docs/$FileName"
         
         Write-Host "Capturing: $TargetUrl -> $ScreenshotPath"
-        shot-scraper $TargetUrl -o $ScreenshotPath --width 1280 --height 800
+        shot-scraper $TargetUrl -o $ScreenshotPath --width 1280 --height 800 --wait 5000
         
         $GitHubRawUrl = "https://raw.githubusercontent.com/Lacketronik/Azure-Status/main/docs/$FileName"
         
         $SlackImageBlocks += @{
             type = 'image'
-            title = @{ type = 'plain_text'; text = "📷 Visual Check: $CleanFileName" }
+            title = @{ type = 'plain_text'; text = "Visual Check: $CleanFileName" }
             image_url = $GitHubRawUrl
             alt_text = $CleanFileName
         }

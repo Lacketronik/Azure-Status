@@ -66,6 +66,8 @@ if ($env:GITHUB_ACTIONS -eq "true") {
     pip install shot-scraper playwright --quiet
     
     playwright install chromium --with-deps
+
+    $CacheBuster = Get-Date -Format "yyyyMMddHHmmss"
     
     for ($i = 0; $i -lt $UrlArray.Count; $i++) {
         $TargetUrl = $UrlArray[$i]
@@ -76,7 +78,7 @@ if ($env:GITHUB_ACTIONS -eq "true") {
         Write-Host "Capturing: $TargetUrl -> $ScreenshotPath"
         shot-scraper $TargetUrl -o $ScreenshotPath --width 1280 --height 800 --wait 5000
         
-        $GitHubRawUrl = "https://raw.githubusercontent.com/Lacketronik/Azure-Status/main/docs/$FileName"
+        $GitHubRawUrl = "https://raw.githubusercontent.com/Lacketronik/Azure-Status/main/docs/$FileName`?v=$CacheBuster"
         
         $SlackImageBlocks += @{
             type = 'image'
@@ -169,6 +171,11 @@ $SlackBlocks = @(
         fields = $UrlFields
     }
 )
+
+if ($SlackImageBlocks.Count -gt 0) {
+    $SlackBlocks += @{ type = 'divider' }
+    $SlackBlocks += $SlackImageBlocks
+}
 
 $Payload = @{ blocks = $SlackBlocks } | ConvertTo-Json -Depth 10 -Compress
 #===========================================================================================================================================================================================

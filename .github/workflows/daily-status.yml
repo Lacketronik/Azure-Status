@@ -8,7 +8,10 @@ on:
 jobs:
   report-and-screenshot:
     runs-on: ubuntu-latest
-    
+
+    permissions:
+      contents: write
+
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4

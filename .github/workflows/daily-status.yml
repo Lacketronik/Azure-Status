@@ -31,7 +31,6 @@ jobs:
       run: |
         ./Query_Azure.ps1
       env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - name: Commit and Push Latest Screenshots
@@ -39,9 +38,15 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         
-        # Check if there are any new or updated screenshot images to push
         git add docs/*.png
         
-        # Commit only if files changed, otherwise exit gracefully without breaking the build
         git commit -m "Update daily live web snapshots [skip ci]" || exit 0
         git push
+
+        sleep 5
+
+    - name: Post Final Report to Slack
+      shell: pwsh
+      run: |
+        $Payload = Get-Content -Raw -Path "slack_payload.json"
+        Invoke-RestMethod -Method Post -Uri "${{ secrets.SLACK_WEBHOOK_URL }}" -Body $Payload -ContentType "application/json; charset=utf-8"

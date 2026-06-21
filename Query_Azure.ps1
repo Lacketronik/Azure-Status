@@ -212,9 +212,8 @@ $Payload = @{ blocks = $SlackBlocks } | ConvertTo-Json -Depth 10 -Compress
 
 
 
-#Send to Slack
+# Write Payload out so that Slack can pick it up after Git Commit the images
 #===========================================================================================================================================================================================
-Write-Host "Shipping native Block Kit payload directly to Slack..."
-Invoke-RestMethod -Method Post -Uri $WebHookURL -Body $Payload -ContentType "application/json; charset=utf-8"
-Write-Host "Complete!"
+$Payload | Out-File -FilePath "slack_payload.json" -Encoding utf8
+Write-Host "Payload cached locally. Ready for Git deployment!"
 #===========================================================================================================================================================================================

@@ -43,3 +43,14 @@ The script automatically discovers endpoints linked to the Static Web Apps by lo
 The script can be excuted locally for development testing. The code contains an execution guard loop that skips the heavy browser installation layers outside of CI environments:
 ```powershell
 ./Query_Azure.ps1
+```
+
+---
+
+## Author
+
+**Faliq**  
+
+* **LinkedIn:** [https://linkedin.com/in/m-faliq-b-alhakim/]
+* **Portfolio:** [https://faliqdoescoding.com]
+* **GitHub:** [https://github.com/Lacketronik]

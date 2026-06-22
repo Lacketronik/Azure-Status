@@ -1,9 +1,10 @@
 name: Daily Azure Billing and Health Report
 
 on:
-  schedule:
-    - cron: '0 0 * * *'
   workflow_dispatch:
+  repository_dispatch:
+    # GitLab Triggger
+    types: [trigger-from-gitlab]
 
 jobs:
   report-and-screenshot:

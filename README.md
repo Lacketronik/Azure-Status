@@ -17,8 +17,8 @@ An automated infrastructure cost-tracking and availability reporting engine. Thi
 
 The project consists of two core moving pieces:
 1.  **.github/workflows/daily-billing.yml**: The automation driver that provisions the system runtime environment, activates Python/PowerShell packages, handles cloud authentication, and commits fresh snapshots.
-UPDATE [22/06/2026]: GitHub Action cron schedule was unreliable and not working. Created a separate GitLab project that houses a single YAML script to be executed in a scheduled pipeline daily to trigger this GitHub Action through HTTP POST.
-3.  **Query_Azure.ps1**: The logic execution file responsible for fetching REST APIs, analyzing JSON trees, verifying endpoint `200 OK` status headers, and assembling the compressed Slack Block Kit payload.
+  - UPDATE [22/06/2026]: GitHub Action cron schedule was unreliable and not working. Created a separate GitLab project that houses a single YAML script to be executed in a scheduled pipeline daily to trigger this GitHub Action through HTTP POST.
+2.  **Query_Azure.ps1**: The logic execution file responsible for fetching REST APIs, analyzing JSON trees, verifying endpoint `200 OK` status headers, and assembling the compressed Slack Block Kit payload.
 
 ---
 

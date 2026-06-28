@@ -49,8 +49,4 @@ The script can be excuted locally for development testing. The code contains an 
 
 ## Author
 
-**Faliq**  
-
-* **LinkedIn:** [https://linkedin.com/in/m-faliq-b-alhakim/]
-* **Portfolio:** [https://faliqdoescoding.com]
-* **GitHub:** [https://github.com/Lacketronik]
+**Faliq** / **Lacketronik**

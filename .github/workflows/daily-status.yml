@@ -44,7 +44,7 @@ jobs:
         git commit -m "Update daily live web snapshots [skip ci]" || exit 0
         git push
 
-        sleep 5
+        sleep 30
 
     - name: Post Final Report to Slack
       shell: pwsh
